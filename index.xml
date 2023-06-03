@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Sarang Blogs</title>
+    <link>https://sarang-26.github.io/</link>
+    <description>Recent content on Sarang Blogs</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 03 Jun 2023 21:33:46 +0200</lastBuildDate><atom:link href="https://sarang-26.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Marketing Attribution</title>
+      <link>https://sarang-26.github.io/posts/marketing-attribution/</link>
+      <pubDate>Sat, 03 Jun 2023 21:33:46 +0200</pubDate>
+      
+      <guid>https://sarang-26.github.io/posts/marketing-attribution/</guid>
+      <description>Introduction to Marketing Attribution</description>
+    </item>
+    
+    <item>
+      <title>Transformers</title>
+      <link>https://sarang-26.github.io/posts/tranformers/</link>
+      <pubDate>Sat, 03 Jun 2023 21:33:46 +0200</pubDate>
+      
+      <guid>https://sarang-26.github.io/posts/tranformers/</guid>
+      <description>Introduction to Transformers</description>
+    </item>
+    
+    
+  </channel>
+</rss>
