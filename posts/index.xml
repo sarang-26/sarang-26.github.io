@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Sarang Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 03 Jun 2023 21:33:46 +0200</lastBuildDate><atom:link href="https://sarang-26.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 09 Jun 2023 16:27:11 +0200</lastBuildDate><atom:link href="https://sarang-26.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Low-Rank Adaption </title>
+      <link>https://sarang-26.github.io/posts/lora/</link>
+      <pubDate>Fri, 09 Jun 2023 16:27:11 +0200</pubDate>
+      
+      <guid>https://sarang-26.github.io/posts/lora/</guid>
+      <description>What is Low-Rank Adaption? - An Intutive Deep Dive</description>
+    </item>
+    
     <item>
       <title>Marketing Attribution</title>
       <link>https://sarang-26.github.io/posts/marketing-attribution/</link>
