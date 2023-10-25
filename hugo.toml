@@ -1,4 +1,54 @@
-baseURL = 'http://example.org/'
+baseURL = 'https://sarang-26.github.io/'
 languageCode = 'en-us'
-title = 'My New Hugo Site'
+title = "Sarang's Logs"
 theme = 'PaperMod'
+
+[params]
+env = "production"
+description = ""
+author = "Theme PaperMod"
+defaultTheme = "auto"
+ShowShareButtons = true
+ShowReadingTime = true
+displayFullLangName = true
+ShowPostNavLinks = true
+ShowBreadCrumbs = false 
+
+    [params.homeInfoParams]
+    Title= "💡Bytes of Brains💡"
+    Content='''I genuinely enjoy navigating through data and applying maths to solve real world problems'''
+
+    [[params.socialIcons]]
+    name = "linkedin"
+    url = "https://www.linkedin.com/in/sarang-sonar-93227a1b7/"
+    
+    [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/sarang-26"
+
+[[menu.main]]
+    name = "Posts"
+    weight=10
+    identifier = "posts"
+    url="posts/"
+[[menu.main]]
+    name = "Archive"
+    weight=20
+    identifier = "archive"
+    url="archives/"
+[[menu.main]]
+    name = "Search"
+    weight=30
+    identifier = "search"
+    url="search/"
+[[menu.main]]
+    name = "Tags"
+    weight=40
+    identifier = "tags"
+    url="tags/"
+[[menu.main]]
+    name = "FAQ"
+    weight=30
+    identifier = "faq"
+    url="faq/"
+

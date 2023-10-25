@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>My New Hugo Site</title>
-    <link>http://example.org/</link>
-    <description>Recent content on My New Hugo Site</description>
+    <title>Sarang&#39;s Logs</title>
+    <link>https://sarang-26.github.io/</link>
+    <description>Recent content on Sarang&#39;s Logs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 25 Oct 2023 13:33:46 +0200</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 25 Oct 2023 13:33:46 +0200</lastBuildDate><atom:link href="https://sarang-26.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Demand and ETR Estimation</title>
-      <link>http://example.org/posts/demand-and-etr-estimation/</link>
+      <link>https://sarang-26.github.io/posts/demand-and-etr-estimation/</link>
       <pubDate>Wed, 25 Oct 2023 13:33:46 +0200</pubDate>
       
-      <guid>http://example.org/posts/demand-and-etr-estimation/</guid>
+      <guid>https://sarang-26.github.io/posts/demand-and-etr-estimation/</guid>
       <description>Introduction
 Airports currently hold a significant portion of Uber’s supply and open supply hours (i.e., supply that is not utilized, but open for dispatch) across the globe. At most airports, drivers are obligated to join a “first-in-first-out” (FIFO) queue from which they are dispatched. When the demand for trips is high relative to the supply of drivers in the queue (“undersupply”), this queue moves quickly and wait times for drivers can be quite low.</description>
     </item>
