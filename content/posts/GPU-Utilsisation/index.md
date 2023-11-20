@@ -107,4 +107,8 @@ Usually the calculated gradients, are stored in 32 bit precision [(single precis
 
 
 
+{{< figure src="images/update_func.png" title="" >}}
+
+
+
 
