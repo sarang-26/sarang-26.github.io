@@ -15,3 +15,5 @@ Airports currently hold a significant portion of Uber’s supply and open supply
 
 One way to tackle this undersupply/oversupply issue at airports is to forecast supply balance and use this to optimize resource allocation. Our first application of these models is in estimating the time to request (ETR) for the airport driver queue. We estimate the length of time a driver would have to wait before they receive a trip request, thereby giving drivers the information they need to identify and reposition in periods of undersupply (short waits), or to remain in the city during periods of oversupply (long waits). 
 
+LONGER -TESTS
+
