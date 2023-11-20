@@ -102,4 +102,4 @@ and update the parameter value accordingly
 
 Usually the calculated gradients, are stored in 32 bit precision [(single precision)](https://en.wikipedia.org/wiki/Single-precision_floating-point_format), which means each if there are a 175 billion parameters, and each gradient is 4 bytes in size\
 
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; 175 Billion * 4 Bytes = 652 GB of memory !
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; 175 Billion * 4 Bytes = 652 GB of memory !!
