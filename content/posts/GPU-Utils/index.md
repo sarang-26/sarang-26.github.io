@@ -63,3 +63,42 @@ Both m_t and v_t are maintained for each parameter. Which mean for a model with 
 Hence, the 8-bit version of Adam (instead of 32 bits ) reduced memory footprint of the optimiser by storing the optimiser states in lower precision. The lower precision, doesnt significanlty affect the model performance while finetuning.
 
 
+### Gradients
+
+One of the most noble ideas which makes deep learning unique, is the idea of backpropogation. It's behaves like an examinaiton which the the model undergoes, and verifies its weaknesses and try to perfect itself, by exactly working and targetting on its weak areas of understanding. 
+
+It put this into a more mathematicaly terms, it provides the direction in which the parameters should be adjusted which would lead to net reduction of loss. Gradients are partial derivatives of the loss function with respect to each parameter of the model. They are calculated for every iteration(number of batches to compelete an epoch). Given a loss function, which is typically the combination of Softmax and Cross-Entropy looks like this:
+
+{{< figure src="images/cross_entropy.png" title="" >}}
+
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Fig 1. Loss Function (Cross Entropy) 
+
+\
+\
+
+ 
+Given the loss function L and parameters to be $$ \theta =(\theta_{1}, \theta_{2} ... ,\theta_{n} )$$ we get gradients 
+
+
+{{< figure src="images/gradients.png" title="" >}}
+
+
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Fig 2. Gradients
+
+
+During the training, we calculate the gradients for each parameter
+{{< figure src="images/one_grad.png" title="" >}}
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Fig 3. Calculating a single gradient
+
+
+\
+and update the parameter value accordingly
+
+{{< figure src="images/update_func.png" title="" >}}
+
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Fig 4. Update Function
+
+
+Usually the calculated gradients, are stored in 32 bit precision [(single precision)](https://en.wikipedia.org/wiki/Single-precision_floating-point_format), which means each if there are a 175 billion parameters, and each gradient is 4 bytes in size\
+
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; 175 Billion * 4 Bytes = 652 GB of memory !!!
