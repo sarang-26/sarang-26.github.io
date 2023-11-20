@@ -70,7 +70,7 @@ One of the most noble ideas which makes deep learning unique, is the idea of bac
 
 It put this into a more mathematicaly terms, it provides the direction in which the parameters should be adjusted which would lead to net reduction of loss. Gradients are partial derivatives of the loss function with respect to each parameter of the model. They are calculated for every iteration(number of batches to compelete an epoch). Given a loss function, which is typically the combination of Softmax and Cross-Entropy looks like this:
 
-{{< figure src="/images/gpu-utilisation/cross_entropy.png" title="" >}}
+{{< figure src="images/cross_entropy.png" title="" >}}
 
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Fig 1. Loss Function (Cross Entropy) 
 
