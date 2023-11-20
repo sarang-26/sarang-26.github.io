@@ -70,7 +70,7 @@ One of the most noble ideas which makes deep learning unique, is the idea of bac
 
 It put this into a more mathematicaly terms, it provides the direction in which the parameters should be adjusted which would lead to net reduction of loss. Gradients are partial derivatives of the loss function with respect to each parameter of the model. They are calculated for every iteration(number of batches to compelete an epoch). Given a loss function, which is typically the combination of Softmax and Cross-Entropy looks like this:
 
-{{< figure src="/cross_entropy.png" title="" >}}
+{{< figure src="/posts/gpu-utilisation/cross_entropy.png" title="" >}}
 
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Fig 1. Loss Function (Cross Entropy) 
 
@@ -81,20 +81,20 @@ It put this into a more mathematicaly terms, it provides the direction in which 
 Given the loss function L and parameters to be $$ \theta =(\theta_{1}, \theta_{2} ... ,\theta_{n} )$$ we get gradients 
 
 
-{{< figure src="/gradients.png" title="" >}}
+{{< figure src="/posts/gradients.png" title="" >}}
 
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Fig 2. Gradients
 
 
 During the training, we calculate the gradients for each parameter
-{{< figure src="/one_grad.png" title="" >}}
+{{< figure src="/posts/one_grad.png" title="" >}}
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Fig 3. Calculating a single gradient
 
 
 \
 and update the parameter value accordingly
 
-{{< figure src="/update_func.png" title="" >}}
+{{< figure src="/posts/update_func.png" title="" >}}
 
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Fig 4. Update Function
 
