@@ -1,7 +1,8 @@
 ---
 title: "Anatomy of Memory Utilisation"
-date: 2023-11-04T10:49:22+01:00
-draft: true 
+date: 2023-11-20T09:44:50+01:00
+draft: false
+tableOfContents: true
 ---
 
 Anatomy of Model Memory while training:
