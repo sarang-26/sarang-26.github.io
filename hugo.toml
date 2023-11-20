@@ -13,10 +13,11 @@ ShowReadingTime = true
 displayFullLangName = true
 ShowPostNavLinks = true
 ShowBreadCrumbs = false 
+tableOfContents = true
 
     [params.homeInfoParams]
     Title= "💡Bytes of Brains💡"
-    Content='''I genuinely enjoy navigating through data and applying maths to solve real world problems'''
+    Content='''I am documenting my learning notes in these blogs, besides I genuinely enjoy applying maths to solve real world problems. '''
 
     [[params.socialIcons]]
     name = "linkedin"
@@ -51,4 +52,12 @@ ShowBreadCrumbs = false
     weight=30
     identifier = "faq"
     url="faq/"
+
+[[module.mounts]]
+source = 'static'
+target = 'static'
+
+[[module.mounts]]
+source = 'images'
+target = 'static/images'
 

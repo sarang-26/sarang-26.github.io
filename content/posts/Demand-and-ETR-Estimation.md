@@ -2,9 +2,14 @@
 title: "Demand and ETR Estimation"
 date: 2023-10-25T13:33:46+02:00
 draft: false
+tableOfContents: true
 ---
 
-**Introduction** 
+
+
+Introduction
+
+
 
 Airports currently hold a significant portion of Uber’s supply and open supply hours (i.e., supply that is not utilized, but open for dispatch) across the globe. At most airports, drivers are obligated to join a “first-in-first-out” (FIFO) queue from which they are dispatched. When the demand for trips is high relative to the supply of drivers in the queue (“undersupply”), this queue moves quickly and wait times for drivers can be quite low. However, when demand is low relative to the amount of available supply (“oversupply”), the queue moves slowly and wait times can be very high. Undersupply creates a poor experience for riders, as they are less likely to get a suitable ride. On the other hand, oversupply creates a poor experience for drivers as they are spending more time waiting for each ride and less time driving. What’s more, drivers don’t currently have a way to see when airports are under- or over-supplied, which perpetuates this problem.
 
