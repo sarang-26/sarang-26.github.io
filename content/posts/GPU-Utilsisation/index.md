@@ -2,7 +2,6 @@
 title: "Anatomy of Memory Utilisation"
 date: 2023-11-20T09:44:50+01:00
 draft: false
-tableOfContents: true
 ---
 
 Anatomy of Model Memory while training:
@@ -102,4 +101,4 @@ and update the parameter value accordingly
 
 Usually the calculated gradients, are stored in 32 bit precision [(single precision)](https://en.wikipedia.org/wiki/Single-precision_floating-point_format), which means each if there are a 175 billion parameters, and each gradient is 4 bytes in size\
 
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; 175 Billion * 4 Bytes = 652 GB of memory !!
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; 175 Billion * 4 Bytes = 652 GB of memory !!!
