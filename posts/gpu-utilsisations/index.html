@@ -106,8 +106,8 @@ Model Weights Optimizer states Gradients Forward Activation for gradient computa
   "keywords": [
     
   ],
-  "articleBody": "Anatomy of Model Memory while training:\nModel Weights Optimizer states Gradients Forward Activation for gradient computation Tempory Buffers Functionality Specific Memory Optimizer States: AdamW is primarly used for training models which requires more training cycles and has effectively higher trainable parameter. It efficently penalises high weight values, by decoupling the process of weight decay in an additional step. For us to understand, what actually goes on under the hood, we need to understand how AdamW is different from Adam optimisation mathematically.\nAdam Optimisation Algorithm Compute the gradients of the loss with respect to the parameters: $$ g_t = \\nabla_{\\theta}f_t(\\theta_{t-1}) $$\nUpdate biased first moment estimate: $$ m_t = \\beta_1 \\cdot m_{t-1} + (1 - \\beta_1) \\cdot g_t $$ This is exponetially decaying average of past gradients. It helps SGD in relevant direction and dampens oscillation.\nUpdate biased second raw moment estimate: $$ v_t = \\beta_2 \\cdot v_{t-1} + (1 - \\beta_2) \\cdot g_t^2 $$ This is the exponentially decaying average of the past squared gradients. It is used to adapt the learning rate of each parameters, scaling down the steps for parameters with large gradients (the ones, which initally had a large update) and scaling up the steps for parameter with small gradients.\nCompute bias-corrected first moment estimate: $$ \\hat{m}_t = \\frac{m_t}{1 - \\beta_1^t} $$\nCompute bias-corrected second raw moment estimate: $$ \\hat{v}_t = \\frac{v_t}{1 - \\beta_2^t} $$\nUpdate the parameters: $$ \\theta_t = \\theta_{t-1} - \\frac{\\eta}{\\sqrt{\\hat{v}_t} + \\epsilon} \\cdot \\hat{m}_t $$\nAdanW Optimisation Algorithm Perform a weight decay step: $$ \\theta_t = \\theta_{t-1} - \\eta \\cdot \\lambda \\cdot \\theta_{t-1} $$\nThen, proceed with the Adam update: $$ \\theta_t = \\theta_t - \\frac{\\eta}{\\sqrt{\\hat{v}_t} + \\epsilon} \\cdot \\hat{m}_t $$\nThe key difference here is that the weight decay is applied directly to the parameters before the adaptive learning rate is applied. This small change helps in regularizing and improving the generalization of the model.\nBoth m_t and v_t are maintained for each parameter. Which mean for a model with N parameters, it Adam/AdamW will require to store 2N moments. Since, each moment is a floating point number typically stored as a 32 bit(4 bytes), this results in 8N bytes of memory usage while training. Usally deep learning models and increasing becoming popular LLMs have billions of parameter. To put this to more prespective, lets consider Chat-GPT 4, which consists of 175 billion parameters. In order to train all the parameter, we would require a memory of 175 Billion * 8 Bytes = 1.4e + 9 bytes = 1120 GB of cache memory !\nHence, the 8-bit version of Adam (instead of 32 bits ) reduced memory footprint of the optimiser by storing the optimiser states in lower precision. The lower precision, doesnt significanlty affect the model performance while finetuning.\n",
-  "wordCount" : "458",
+  "articleBody": "Anatomy of Model Memory while training:\nModel Weights Optimizer states Gradients Forward Activation for gradient computation Tempory Buffers Functionality Specific Memory Optimizer States: AdamW is primarly used for training models which requires more training cycles and has effectively higher trainable parameter. It efficently penalises high weight values, by decoupling the process of weight decay in an additional step. For us to understand, what actually goes on under the hood, we need to understand how AdamW is different from Adam optimisation mathematically.\nAdam Optimisation Algorithm Compute the gradients of the loss with respect to the parameters: $$ g_t = \\nabla_{\\theta}f_t(\\theta_{t-1}) $$\nUpdate biased first moment estimate: $$ m_t = \\beta_1 \\cdot m_{t-1} + (1 - \\beta_1) \\cdot g_t $$ This is exponetially decaying average of past gradients. It helps SGD in relevant direction and dampens oscillation.\nUpdate biased second raw moment estimate: $$ v_t = \\beta_2 \\cdot v_{t-1} + (1 - \\beta_2) \\cdot g_t^2 $$ This is the exponentially decaying average of the past squared gradients. It is used to adapt the learning rate of each parameters, scaling down the steps for parameters with large gradients (the ones, which initally had a large update) and scaling up the steps for parameter with small gradients.\nCompute bias-corrected first moment estimate: $$ \\hat{m}_t = \\frac{m_t}{1 - \\beta_1^t} $$\nCompute bias-corrected second raw moment estimate: $$ \\hat{v}_t = \\frac{v_t}{1 - \\beta_2^t} $$\nUpdate the parameters: $$ \\theta_t = \\theta_{t-1} - \\frac{\\eta}{\\sqrt{\\hat{v}_t} + \\epsilon} \\cdot \\hat{m}_t $$\nAdanW Optimisation Algorithm Perform a weight decay step: $$ \\theta_t = \\theta_{t-1} - \\eta \\cdot \\lambda \\cdot \\theta_{t-1} $$\nThen, proceed with the Adam update: $$ \\theta_t = \\theta_t - \\frac{\\eta}{\\sqrt{\\hat{v}_t} + \\epsilon} \\cdot \\hat{m}_t $$\nThe key difference here is that the weight decay is applied directly to the parameters before the adaptive learning rate is applied. This small change helps in regularizing and improving the generalization of the model.\nBoth m_t and v_t are maintained for each parameter. Which mean for a model with N parameters, it Adam/AdamW will require to store 2N moments. Since, each moment is a floating point number typically stored as a 32 bit(4 bytes), this results in 8N bytes of memory usage while training. Usally deep learning models and increasing becoming popular LLMs have billions of parameter. To put this to more prespective, lets consider Chat-GPT 4, which consists of 175 billion parameters. In order to train all the parameter, we would require a memory of 175 Billion * 8 Bytes = 1.4e + 9 bytes = 1120 GB of cache memory !\nHence, the 8-bit version of Adam (instead of 32 bits ) reduced memory footprint of the optimiser by storing the optimiser states in lower precision. The lower precision, doesnt significanlty affect the model performance while finetuning. Compare this snippet from content/posts/GPU-Utilsisations/index.md: title: “GPU Utilsisations” date: 2023-11-20T09:44:50+01:00 draft: false Anatomy of Model Memory while training:\nModel Weights Optimizer states Gradients Forward Activation for gradient computation Tempory Buffers Functionality Specific Memory ",
+  "wordCount" : "491",
   "inLanguage": "en",
   "datePublished": "2023-11-20T09:44:50+01:00",
   "dateModified": "2023-11-20T09:44:50+01:00",
@@ -267,7 +267,20 @@ $$ \theta_t = \theta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} \cdot \hat{m}_
 <p>Both m_t and v_t are maintained for each parameter. Which mean for a model with N parameters, it Adam/AdamW will require to store 2N moments. Since, each moment is a floating point number typically stored as a 32 bit(4 bytes), this results in 8N bytes of memory usage while training. Usally deep learning models and increasing becoming popular LLMs have billions of parameter. To put this to more prespective, lets consider Chat-GPT 4, which consists of 175 billion parameters. In order to train all the parameter, we would require a memory of <br>
 <br>
          175 Billion * 8 Bytes = 1.4e + 9 bytes = 1120 GB of cache memory !</p>
-<p>Hence, the 8-bit version of Adam (instead of 32 bits ) reduced memory footprint of the optimiser by storing the optimiser states in lower precision. The lower precision, doesnt significanlty affect the model performance while finetuning.</p>
+<h2 id="compare-this-snippet-from-contentpostsgpu-utilsisationsindexmd">Hence, the 8-bit version of Adam (instead of 32 bits ) reduced memory footprint of the optimiser by storing the optimiser states in lower precision. The lower precision, doesnt significanlty affect the model performance while finetuning.
+Compare this snippet from content/posts/GPU-Utilsisations/index.md:</h2>
+<h2 id="draft-false">title: &ldquo;GPU Utilsisations&rdquo;
+date: 2023-11-20T09:44:50+01:00
+draft: false</h2>
+<p>Anatomy of Model Memory while training:</p>
+<ol>
+<li>Model Weights</li>
+<li>Optimizer states</li>
+<li>Gradients</li>
+<li>Forward Activation for gradient computation</li>
+<li>Tempory Buffers</li>
+<li>Functionality Specific Memory</li>
+</ol>
 
 
   </div>
@@ -276,11 +289,6 @@ $$ \theta_t = \theta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} \cdot \hat{m}_
     <ul class="post-tags">
     </ul>
 <nav class="paginav">
-  <a class="prev" href="https://sarang-26.github.io/posts/gpu-utils/">
-    <span class="title">« Prev</span>
-    <br>
-    <span>Anatomy of Memory Utilisation</span>
-  </a>
   <a class="next" href="https://sarang-26.github.io/posts/demand-etr-estimation/">
     <span class="title">Next »</span>
     <br>

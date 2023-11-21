@@ -1,7 +1,7 @@
 ---
 title: "Anatomy of Memory Utilisation"
 date: 2023-11-20T09:44:50+01:00
-draft: false
+draft: true
 ---
 
 Anatomy of Model Memory while training:
@@ -61,5 +61,20 @@ Both m_t and v_t are maintained for each parameter. Which mean for a model with 
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; 175 Billion * 8 Bytes = 1.4e + 9 bytes = 1120 GB of cache memory !
 
 Hence, the 8-bit version of Adam (instead of 32 bits ) reduced memory footprint of the optimiser by storing the optimiser states in lower precision. The lower precision, doesnt significanlty affect the model performance while finetuning.
+Compare this snippet from content/posts/GPU-Utilsisations/index.md:
+---
+title: "GPU Utilsisations"
+date: 2023-11-20T09:44:50+01:00
+draft: false
+---
+
+Anatomy of Model Memory while training:
+1. Model Weights
+2. Optimizer states
+3. Gradients
+4. Forward Activation for gradient computation 
+5. Tempory Buffers
+6. Functionality Specific Memory
+
 
 

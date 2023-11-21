@@ -1,16 +1,21 @@
 ---
 title: "Anatomy of Memory Utilisation"
-date: 2023-11-20T09:44:50+01:00
+date: 2023-10-20T09:44:50+01:00
 draft: false
+ShowToc: true
 ---
 
+To understand, how to train the model efficiently, its very important to understand how the memory is behaving in different training stages. In this blog, we will try to understand the anatomy of memory utilisation while training a model.\
+
+
+
 Anatomy of Model Memory while training:
-1. Model Weights
-2. Optimizer states
-3. Gradients
-4. Forward Activation for gradient computation 
-5. Tempory Buffers
-6. Functionality Specific Memory
+   
+1. Optimizer states
+2. Gradients
+3. Forward Activation for gradient computation 
+4. Tempory Buffers
+
 
 
 
@@ -73,17 +78,15 @@ It put this into a more mathematicaly terms, it provides the direction in which 
 
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Fig 1. Loss Function (Cross Entropy) 
 
-\
-\
+
 
  
 Given the loss function L and parameters to be $$ \theta =(\theta_{1}, \theta_{2} ... ,\theta_{n} )$$ we get gradients 
 
 
 {{< figure src="images/gradients.png" title="" >}}
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Fig 2. Gradients 
 
-
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Fig 2. Gradients
 
 
 During the training, we calculate the gradients for each parameter
@@ -102,3 +105,30 @@ and update the parameter value accordingly
 Usually the calculated gradients, are stored in 32 bit precision [(single precision)](https://en.wikipedia.org/wiki/Single-precision_floating-point_format), which means each if there are a 175 billion parameters, and each gradient is 4 bytes in size\
 
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; 175 Billion * 4 Bytes = 652 GB of memory !!!
+
+This is a huge amount of memory, and is not feasible to store all the gradients in memory. Hence, we store the gradients in lower precision, which is 16 bit precision [(half precision)](https://en.wikipedia.org/wiki/Half-precision_floating-point_format). This reduces the memory footprint by half, and is a good tradeoff between memory and performance.
+
+### Forward Activation for gradient computation
+
+In order to calculate the gradients, we need to compute the forward activation of the model. This is the process of passing the input through the model, and calculating the output. This is done for each batch, and the gradients are calculated for each batch. The forward activation is stored in 32 bit precision, and is stored in the cache memory. This is the reason why, we need to have a large cache memory, to store the forward activation of the model.
+
+### Temporary Buffers
+
+Its very common, to encounter the OOM (Out of Memory) error while training a model, even when we know that the number of parameters in the model are compareltive less. Sometimes, we can see the cache memory is emptied after a few epochs, and the training resumes. This is because, the cache memory is not only used to store the model parameters, but also to store the temporary buffers.
+Temporary variables are created during computation. They temporarily require a lot if memory, before they are finally released. For example,
+
+{{< figure src="images/before_activation.png" title="" >}}
+
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Fig 5. Function before activation
+
+The output of the matrix multiplication requires memory, before its is operated again by the activation function.
+
+{{< figure src="images/activation_function.png" title="" >}}
+
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Fig 6. Activation Function
+
+The output of the activation function, requires memory before its is operated again by the next layer or being used by backpropogation to calculate the gradients. 
+
+
+
+
