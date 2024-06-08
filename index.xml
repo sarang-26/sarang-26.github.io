@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>My New Hugo Site</title>
-    <link>http://example.org/</link>
+    <link>https://sarang-26.github.io/</link>
     <description>Recent content on My New Hugo Site</description>
     <generator>Hugo -- 0.112.7</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 08 Jun 2024 11:30:39 +0200</lastBuildDate>
-    <atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://sarang-26.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>My First Post</title>
-      <link>http://example.org/posts/new-post/my-first-post/</link>
+      <link>https://sarang-26.github.io/posts/new-post/my-first-post/</link>
       <pubDate>Sat, 08 Jun 2024 11:30:39 +0200</pubDate>
-      <guid>http://example.org/posts/new-post/my-first-post/</guid>
+      <guid>https://sarang-26.github.io/posts/new-post/my-first-post/</guid>
       <description>Welcome to my first post!! </description>
     </item>
     <item>
       <title>Anatomy of Memory Utilisation</title>
-      <link>http://example.org/posts/gpu-utilisation-/gpu-utilisation-llm/</link>
+      <link>https://sarang-26.github.io/posts/gpu-utilisation-/gpu-utilisation-llm/</link>
       <pubDate>Fri, 20 Oct 2023 09:44:50 +0100</pubDate>
-      <guid>http://example.org/posts/gpu-utilisation-/gpu-utilisation-llm/</guid>
+      <guid>https://sarang-26.github.io/posts/gpu-utilisation-/gpu-utilisation-llm/</guid>
       <description>To understand, how to train the model efficiently, its very important to understand how the memory is behaving in different training stages. In this blog, we will try to understand the anatomy of memory utilisation while training a model.\
 Anatomy of Model Memory while training:
 Optimizer states Gradients Forward Activation for gradient computation Tempory Buffers Optimizer States: AdamW is primarly used for training models which requires more training cycles and has effectively higher trainable parameter.</description>
