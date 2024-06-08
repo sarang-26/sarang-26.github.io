@@ -264,26 +264,26 @@ $$ \theta_t = \theta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} \cdot \hat{m}_
 <p>One of the most noble ideas which makes deep learning unique, is the idea of backpropogation. It&rsquo;s behaves like an examinaiton which the the model undergoes, and verifies its weaknesses and try to perfect itself, by exactly working and targetting on its weak areas of understanding.</p>
 <p>It put this into a more mathematicaly terms, it provides the direction in which the parameters should be adjusted which would lead to net reduction of loss. Gradients are partial derivatives of the loss function with respect to each parameter of the model. They are calculated for every iteration(number of batches to compelete an epoch). Given a loss function, which is typically the combination of Softmax and Cross-Entropy looks like this:</p>
 <figure>
-    <img loading="lazy" src="images/cross_entropy.png"/> 
+    <img loading="lazy" src="/cross_entropy.png"/> 
 </figure>
 
 <p>               Fig 1. Loss Function (Cross Entropy)</p>
 <p>Given the loss function L and parameters to be $$ \theta =(\theta_{1}, \theta_{2} &hellip; ,\theta_{n} )$$ we get gradients</p>
 <p><figure>
-    <img loading="lazy" src="images/gradients.png"/> 
+    <img loading="lazy" src="/gradients.png"/> 
 </figure>
 
                Fig 2. Gradients</p>
 <p>During the training, we calculate the gradients for each parameter
 <figure>
-    <img loading="lazy" src="images/one_grad.png"/> 
+    <img loading="lazy" src="/one_grad.png"/> 
 </figure>
 
                Fig 3. Calculating a single gradient</p>
 <p><br>
 and update the parameter value accordingly</p>
 <figure>
-    <img loading="lazy" src="images/update_func.png"/> 
+    <img loading="lazy" src="/update_func.png"/> 
 </figure>
 
 <p>               Fig 4. Update Function</p>
@@ -296,13 +296,13 @@ and update the parameter value accordingly</p>
 <p>Its very common, to encounter the OOM (Out of Memory) error while training a model, even when we know that the number of parameters in the model are compareltive less. Sometimes, we can see the cache memory is emptied after a few epochs, and the training resumes. This is because, the cache memory is not only used to store the model parameters, but also to store the temporary buffers.
 Temporary variables are created during computation. They temporarily require a lot if memory, before they are finally released. For example,</p>
 <figure>
-    <img loading="lazy" src="images/before_activation.png"/> 
+    <img loading="lazy" src="./before_activation.png"/> 
 </figure>
 
 <p>               Fig 5. Function before activation</p>
 <p>The output of the matrix multiplication requires memory, before its is operated again by the activation function.</p>
 <figure>
-    <img loading="lazy" src="images/activation_function.png"/> 
+    <img loading="lazy" src="./activation_function.png"/> 
 </figure>
 
 <p>               Fig 6. Activation Function</p>
