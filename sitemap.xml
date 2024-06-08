@@ -2,13 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://sarang-26.github.io/posts/new-post/my-first-post/</loc>
-    <lastmod>2024-06-08T11:30:39+02:00</lastmod>
+    <loc>https://sarang-26.github.io/posts/late-post-test/gpu-utils/</loc>
+    <lastmod>2024-06-08T12:21:10+02:00</lastmod>
   </url><url>
     <loc>https://sarang-26.github.io/</loc>
-    <lastmod>2024-06-08T11:30:39+02:00</lastmod>
+    <lastmod>2024-06-08T12:21:10+02:00</lastmod>
   </url><url>
     <loc>https://sarang-26.github.io/posts/</loc>
+    <lastmod>2024-06-08T12:21:10+02:00</lastmod>
+  </url><url>
+    <loc>https://sarang-26.github.io/posts/new-post/my-first-post/</loc>
     <lastmod>2024-06-08T11:30:39+02:00</lastmod>
   </url><url>
     <loc>https://sarang-26.github.io/posts/gpu-utilisation-/gpu-utilisation-llm/</loc>

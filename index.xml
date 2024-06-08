@@ -6,8 +6,16 @@
     <description>Recent content on My New Hugo Site</description>
     <generator>Hugo -- 0.112.7</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 08 Jun 2024 11:30:39 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 08 Jun 2024 12:21:10 +0200</lastBuildDate>
     <atom:link href="https://sarang-26.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Gpu Utils</title>
+      <link>https://sarang-26.github.io/posts/late-post-test/gpu-utils/</link>
+      <pubDate>Sat, 08 Jun 2024 12:21:10 +0200</pubDate>
+      <guid>https://sarang-26.github.io/posts/late-post-test/gpu-utils/</guid>
+      <description>Gradients One of the most noble ideas which makes deep learning unique, is the idea of backpropogation. It&amp;rsquo;s behaves like an examinaiton which the the model undergoes, and verifies its weaknesses and try to perfect itself, by exactly working and targetting on its weak areas of understanding.
+It put this into a more mathematicaly terms, it provides the direction in which the parameters should be adjusted which would lead to net reduction of loss.</description>
+    </item>
     <item>
       <title>My First Post</title>
       <link>https://sarang-26.github.io/posts/new-post/my-first-post/</link>
