@@ -13,7 +13,7 @@
       <link>http://example.org/posts/my-first-post/</link>
       <pubDate>Sat, 08 Jun 2024 11:30:39 +0200</pubDate>
       <guid>http://example.org/posts/my-first-post/</guid>
-      <description>Welcome to my first post </description>
+      <description>Welcome to my first post!! </description>
     </item>
   </channel>
 </rss>
