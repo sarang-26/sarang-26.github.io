@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Anatomy of Memory Utilisation | My New Hugo Site</title>
+<meta name="keywords" content="">
+<meta name="description" content="To understand, how to train the model efficiently, its very important to understand how the memory is behaving in different training stages. In this blog, we will try to understand the anatomy of memory utilisation while training a model.\
+Anatomy of Model Memory while training:
+Optimizer states Gradients Forward Activation for gradient computation Tempory Buffers Optimizer States: AdamW is primarly used for training models which requires more training cycles and has effectively higher trainable parameter.">
+<meta name="author" content="">
+<link rel="canonical" href="http://example.org/posts/gpu-utilisation-llm/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://example.org/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://example.org/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://example.org/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://example.org/apple-touch-icon.png">
+<link rel="mask-icon" href="http://example.org/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Anatomy of Memory Utilisation" />
+<meta property="og:description" content="To understand, how to train the model efficiently, its very important to understand how the memory is behaving in different training stages. In this blog, we will try to understand the anatomy of memory utilisation while training a model.\
+Anatomy of Model Memory while training:
+Optimizer states Gradients Forward Activation for gradient computation Tempory Buffers Optimizer States: AdamW is primarly used for training models which requires more training cycles and has effectively higher trainable parameter." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/gpu-utilisation-llm/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-10-20T09:44:50+01:00" />
+<meta property="article:modified_time" content="2023-10-20T09:44:50+01:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Anatomy of Memory Utilisation"/>
+<meta name="twitter:description" content="To understand, how to train the model efficiently, its very important to understand how the memory is behaving in different training stages. In this blog, we will try to understand the anatomy of memory utilisation while training a model.\
+Anatomy of Model Memory while training:
+Optimizer states Gradients Forward Activation for gradient computation Tempory Buffers Optimizer States: AdamW is primarly used for training models which requires more training cycles and has effectively higher trainable parameter."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://example.org/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Anatomy of Memory Utilisation",
+      "item": "http://example.org/posts/gpu-utilisation-llm/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Anatomy of Memory Utilisation",
+  "name": "Anatomy of Memory Utilisation",
+  "description": "To understand, how to train the model efficiently, its very important to understand how the memory is behaving in different training stages. In this blog, we will try to understand the anatomy of memory utilisation while training a model.\\\nAnatomy of Model Memory while training:\nOptimizer states Gradients Forward Activation for gradient computation Tempory Buffers Optimizer States: AdamW is primarly used for training models which requires more training cycles and has effectively higher trainable parameter.",
+  "keywords": [
+    
+  ],
+  "articleBody": "To understand, how to train the model efficiently, its very important to understand how the memory is behaving in different training stages. In this blog, we will try to understand the anatomy of memory utilisation while training a model.\\\nAnatomy of Model Memory while training:\nOptimizer states Gradients Forward Activation for gradient computation Tempory Buffers Optimizer States: AdamW is primarly used for training models which requires more training cycles and has effectively higher trainable parameter. It efficently penalises high weight values, by decoupling the process of weight decay in an additional step. For us to understand, what actually goes on under the hood, we need to understand how AdamW is different from Adam optimisation mathematically.\nAdam Optimisation Algorithm Compute the gradients of the loss with respect to the parameters: $$ g_t = \\nabla_{\\theta}f_t(\\theta_{t-1}) $$\nUpdate biased first moment estimate: $$ m_t = \\beta_1 \\cdot m_{t-1} + (1 - \\beta_1) \\cdot g_t $$ This is exponetially decaying average of past gradients. It helps SGD in relevant direction and dampens oscillation.\nUpdate biased second raw moment estimate: $$ v_t = \\beta_2 \\cdot v_{t-1} + (1 - \\beta_2) \\cdot g_t^2 $$ This is the exponentially decaying average of the past squared gradients. It is used to adapt the learning rate of each parameters, scaling down the steps for parameters with large gradients (the ones, which initally had a large update) and scaling up the steps for parameter with small gradients.\nCompute bias-corrected first moment estimate: $$ \\hat{m}_t = \\frac{m_t}{1 - \\beta_1^t} $$\nCompute bias-corrected second raw moment estimate: $$ \\hat{v}_t = \\frac{v_t}{1 - \\beta_2^t} $$\nUpdate the parameters: $$ \\theta_t = \\theta_{t-1} - \\frac{\\eta}{\\sqrt{\\hat{v}_t} + \\epsilon} \\cdot \\hat{m}_t $$\nAdanW Optimisation Algorithm Perform a weight decay step: $$ \\theta_t = \\theta_{t-1} - \\eta \\cdot \\lambda \\cdot \\theta_{t-1} $$\nThen, proceed with the Adam update: $$ \\theta_t = \\theta_t - \\frac{\\eta}{\\sqrt{\\hat{v}_t} + \\epsilon} \\cdot \\hat{m}_t $$\nThe key difference here is that the weight decay is applied directly to the parameters before the adaptive learning rate is applied. This small change helps in regularizing and improving the generalization of the model.\nBoth m_t and v_t are maintained for each parameter. Which mean for a model with N parameters, it Adam/AdamW will require to store 2N moments. Since, each moment is a floating point number typically stored as a 32 bit(4 bytes), this results in 8N bytes of memory usage while training. Usally deep learning models and increasing becoming popular LLMs have billions of parameter. To put this to more prespective, lets consider Chat-GPT 4, which consists of 175 billion parameters. In order to train all the parameter, we would require a memory of 175 Billion * 8 Bytes = 1.4e + 9 bytes = 1120 GB of cache memory !\nHence, the 8-bit version of Adam (instead of 32 bits ) reduced memory footprint of the optimiser by storing the optimiser states in lower precision. The lower precision, doesnt significanlty affect the model performance while finetuning.\nGradients One of the most noble ideas which makes deep learning unique, is the idea of backpropogation. It’s behaves like an examinaiton which the the model undergoes, and verifies its weaknesses and try to perfect itself, by exactly working and targetting on its weak areas of understanding.\nIt put this into a more mathematicaly terms, it provides the direction in which the parameters should be adjusted which would lead to net reduction of loss. Gradients are partial derivatives of the loss function with respect to each parameter of the model. They are calculated for every iteration(number of batches to compelete an epoch). Given a loss function, which is typically the combination of Softmax and Cross-Entropy looks like this:\nFig 1. Loss Function (Cross Entropy)\nGiven the loss function L and parameters to be $$ \\theta =(\\theta_{1}, \\theta_{2} … ,\\theta_{n} )$$ we get gradients\nFig 2. Gradients\nDuring the training, we calculate the gradients for each parameter Fig 3. Calculating a single gradient\nand update the parameter value accordingly\nFig 4. Update Function\nUsually the calculated gradients, are stored in 32 bit precision (single precision), which means each if there are a 175 billion parameters, and each gradient is 4 bytes in size\\\n175 Billion * 4 Bytes = 652 GB of memory !!!\nThis is a huge amount of memory, and is not feasible to store all the gradients in memory. Hence, we store the gradients in lower precision, which is 16 bit precision (half precision). This reduces the memory footprint by half, and is a good tradeoff between memory and performance.\nForward Activation for gradient computation In order to calculate the gradients, we need to compute the forward activation of the model. This is the process of passing the input through the model, and calculating the output. This is done for each batch, and the gradients are calculated for each batch. The forward activation is stored in 32 bit precision, and is stored in the cache memory. This is the reason why, we need to have a large cache memory, to store the forward activation of the model.\nTemporary Buffers Its very common, to encounter the OOM (Out of Memory) error while training a model, even when we know that the number of parameters in the model are compareltive less. Sometimes, we can see the cache memory is emptied after a few epochs, and the training resumes. This is because, the cache memory is not only used to store the model parameters, but also to store the temporary buffers. Temporary variables are created during computation. They temporarily require a lot if memory, before they are finally released. For example,\nFig 5. Function before activation\nThe output of the matrix multiplication requires memory, before its is operated again by the activation function.\nFig 6. Activation Function\nThe output of the activation function, requires memory before its is operated again by the next layer or being used by backpropogation to calculate the gradients.\n",
+  "wordCount" : "984",
+  "inLanguage": "en",
+  "datePublished": "2023-10-20T09:44:50+01:00",
+  "dateModified": "2023-10-20T09:44:50+01:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://example.org/posts/gpu-utilisation-llm/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "My New Hugo Site",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://example.org/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://example.org/" accesskey="h" title="My New Hugo Site (Alt + H)">My New Hugo Site</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Anatomy of Memory Utilisation
+    </h1>
+    <div class="post-meta"><span title='2023-10-20 09:44:50 +0100 +0100'>October 20, 2023</span>
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#optimizer-states" aria-label="Optimizer States:">Optimizer States:</a><ul>
+                        
+                <li>
+                    <a href="#adam-optimisation-algorithm" aria-label="Adam Optimisation Algorithm">Adam Optimisation Algorithm</a></li>
+                <li>
+                    <a href="#adanw-optimisation-algorithm" aria-label="AdanW Optimisation Algorithm">AdanW Optimisation Algorithm</a></li></ul>
+                </li>
+                <li>
+                    <a href="#gradients" aria-label="Gradients">Gradients</a></li>
+                <li>
+                    <a href="#forward-activation-for-gradient-computation" aria-label="Forward Activation for gradient computation">Forward Activation for gradient computation</a></li>
+                <li>
+                    <a href="#temporary-buffers" aria-label="Temporary Buffers">Temporary Buffers</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>To understand, how to train the model efficiently, its very important to understand how the memory is behaving in different training stages. In this blog, we will try to understand the anatomy of memory utilisation while training a model.\</p>
+<p>Anatomy of Model Memory while training:</p>
+<ol>
+<li>Optimizer states</li>
+<li>Gradients</li>
+<li>Forward Activation for gradient computation</li>
+<li>Tempory Buffers</li>
+</ol>
+<h3 id="optimizer-states">Optimizer States:<a hidden class="anchor" aria-hidden="true" href="#optimizer-states">#</a></h3>
+<p>AdamW is primarly used for training models which requires more training cycles and has effectively higher trainable parameter. It efficently penalises high weight values, by decoupling the process of weight decay in an additional step. For us to understand, what actually goes on under the hood, we need to understand how AdamW is different from Adam optimisation mathematically.</p>
+<h4 id="adam-optimisation-algorithm">Adam Optimisation Algorithm<a hidden class="anchor" aria-hidden="true" href="#adam-optimisation-algorithm">#</a></h4>
+<ol>
+<li>
+<p>Compute the gradients of the loss with respect to the parameters:
+$$ g_t = \nabla_{\theta}f_t(\theta_{t-1}) $$</p>
+</li>
+<li>
+<p>Update biased first moment estimate:
+$$ m_t = \beta_1 \cdot m_{t-1} + (1 - \beta_1) \cdot g_t $$
+This is exponetially decaying average of past gradients. It helps SGD in relevant direction and dampens oscillation.</p>
+</li>
+<li>
+<p>Update biased second raw moment estimate:
+$$ v_t = \beta_2 \cdot v_{t-1} + (1 - \beta_2) \cdot g_t^2 $$
+This is the exponentially decaying average of the past squared gradients. It is used to adapt the learning rate of each parameters, scaling down the steps for parameters with large gradients
+(the ones, which initally had a large update) and scaling up the steps for parameter with small gradients.</p>
+</li>
+<li>
+<p>Compute bias-corrected first moment estimate:
+$$ \hat{m}_t = \frac{m_t}{1 - \beta_1^t} $$</p>
+</li>
+<li>
+<p>Compute bias-corrected second raw moment estimate:
+$$ \hat{v}_t = \frac{v_t}{1 - \beta_2^t} $$</p>
+</li>
+<li>
+<p>Update the parameters:
+$$ \theta_t = \theta_{t-1} - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} \cdot \hat{m}_t $$</p>
+</li>
+</ol>
+<h4 id="adanw-optimisation-algorithm">AdanW Optimisation Algorithm<a hidden class="anchor" aria-hidden="true" href="#adanw-optimisation-algorithm">#</a></h4>
+<ol start="7">
+<li>
+<p>Perform a weight decay step:
+$$ \theta_t = \theta_{t-1} - \eta \cdot \lambda \cdot \theta_{t-1} $$</p>
+</li>
+<li>
+<p>Then, proceed with the Adam update:
+$$ \theta_t = \theta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} \cdot \hat{m}_t $$</p>
+</li>
+</ol>
+<p>The key difference here is that the weight decay is applied directly to the parameters before the adaptive learning rate is applied. This small change helps in regularizing and improving the generalization of the model.</p>
+<p>Both m_t and v_t are maintained for each parameter. Which mean for a model with N parameters, it Adam/AdamW will require to store 2N moments. Since, each moment is a floating point number typically stored as a 32 bit(4 bytes), this results in 8N bytes of memory usage while training. Usally deep learning models and increasing becoming popular LLMs have billions of parameter. To put this to more prespective, lets consider Chat-GPT 4, which consists of 175 billion parameters. In order to train all the parameter, we would require a memory of <br>
+<br>
+         175 Billion * 8 Bytes = 1.4e + 9 bytes = 1120 GB of cache memory !</p>
+<p>Hence, the 8-bit version of Adam (instead of 32 bits ) reduced memory footprint of the optimiser by storing the optimiser states in lower precision. The lower precision, doesnt significanlty affect the model performance while finetuning.</p>
+<h3 id="gradients">Gradients<a hidden class="anchor" aria-hidden="true" href="#gradients">#</a></h3>
+<p>One of the most noble ideas which makes deep learning unique, is the idea of backpropogation. It&rsquo;s behaves like an examinaiton which the the model undergoes, and verifies its weaknesses and try to perfect itself, by exactly working and targetting on its weak areas of understanding.</p>
+<p>It put this into a more mathematicaly terms, it provides the direction in which the parameters should be adjusted which would lead to net reduction of loss. Gradients are partial derivatives of the loss function with respect to each parameter of the model. They are calculated for every iteration(number of batches to compelete an epoch). Given a loss function, which is typically the combination of Softmax and Cross-Entropy looks like this:</p>
+<figure>
+    <img loading="lazy" src="./cross_entropy.png"/> 
+</figure>
+
+<p>               Fig 1. Loss Function (Cross Entropy)</p>
+<p>Given the loss function L and parameters to be $$ \theta =(\theta_{1}, \theta_{2} &hellip; ,\theta_{n} )$$ we get gradients</p>
+<p><figure>
+    <img loading="lazy" src="./gradients.png"/> 
+</figure>
+
+               Fig 2. Gradients</p>
+<p>During the training, we calculate the gradients for each parameter
+<figure>
+    <img loading="lazy" src="./one_grad.png"/> 
+</figure>
+
+               Fig 3. Calculating a single gradient</p>
+<p><br>
+and update the parameter value accordingly</p>
+<figure>
+    <img loading="lazy" src="./update_func.png"/> 
+</figure>
+
+<p>               Fig 4. Update Function</p>
+<p>Usually the calculated gradients, are stored in 32 bit precision <a href="https://en.wikipedia.org/wiki/Single-precision_floating-point_format">(single precision)</a>, which means each if there are a 175 billion parameters, and each gradient is 4 bytes in size\</p>
+<p>         175 Billion * 4 Bytes = 652 GB of memory !!!</p>
+<p>This is a huge amount of memory, and is not feasible to store all the gradients in memory. Hence, we store the gradients in lower precision, which is 16 bit precision <a href="https://en.wikipedia.org/wiki/Half-precision_floating-point_format">(half precision)</a>. This reduces the memory footprint by half, and is a good tradeoff between memory and performance.</p>
+<h3 id="forward-activation-for-gradient-computation">Forward Activation for gradient computation<a hidden class="anchor" aria-hidden="true" href="#forward-activation-for-gradient-computation">#</a></h3>
+<p>In order to calculate the gradients, we need to compute the forward activation of the model. This is the process of passing the input through the model, and calculating the output. This is done for each batch, and the gradients are calculated for each batch. The forward activation is stored in 32 bit precision, and is stored in the cache memory. This is the reason why, we need to have a large cache memory, to store the forward activation of the model.</p>
+<h3 id="temporary-buffers">Temporary Buffers<a hidden class="anchor" aria-hidden="true" href="#temporary-buffers">#</a></h3>
+<p>Its very common, to encounter the OOM (Out of Memory) error while training a model, even when we know that the number of parameters in the model are compareltive less. Sometimes, we can see the cache memory is emptied after a few epochs, and the training resumes. This is because, the cache memory is not only used to store the model parameters, but also to store the temporary buffers.
+Temporary variables are created during computation. They temporarily require a lot if memory, before they are finally released. For example,</p>
+<figure>
+    <img loading="lazy" src="./before_activation.png"/> 
+</figure>
+
+<p>               Fig 5. Function before activation</p>
+<p>The output of the matrix multiplication requires memory, before its is operated again by the activation function.</p>
+<figure>
+    <img loading="lazy" src="./activation_function.png"/> 
+</figure>
+
+<p>               Fig 6. Activation Function</p>
+<p>The output of the activation function, requires memory before its is operated again by the next layer or being used by backpropogation to calculate the gradients.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2024 <a href="http://example.org/">My New Hugo Site</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
