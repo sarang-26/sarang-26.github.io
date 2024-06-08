@@ -15,5 +15,14 @@
       <guid>http://example.org/posts/my-first-post/</guid>
       <description>Welcome to my first post!! </description>
     </item>
+    <item>
+      <title>Anatomy of Memory Utilisation</title>
+      <link>http://example.org/posts/gpu-utilisation/</link>
+      <pubDate>Fri, 20 Oct 2023 09:44:50 +0100</pubDate>
+      <guid>http://example.org/posts/gpu-utilisation/</guid>
+      <description>To understand, how to train the model efficiently, its very important to understand how the memory is behaving in different training stages. In this blog, we will try to understand the anatomy of memory utilisation while training a model.\
+Anatomy of Model Memory while training:
+Optimizer states Gradients Forward Activation for gradient computation Tempory Buffers Optimizer States: AdamW is primarly used for training models which requires more training cycles and has effectively higher trainable parameter.</description>
+    </item>
   </channel>
 </rss>
